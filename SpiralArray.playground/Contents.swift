@@ -60,9 +60,39 @@ func getSpiralState(n: Int) -> [[Int]] {
     return result
 }
 
+func getSpiralQuadro(n: Int) -> [[Int]] {
+    var result: [[Int]] = Array(repeating: Array(repeating: n * n, count: n),
+                                count: n)
+    var i = 1
+
+    for d in 0..<(n / 2) {
+        for x in d..<(n - d) { // →
+            result[x][d] = i
+            i += 1
+        }
+
+        for y in (d + 1)..<(n - d) { // ↓
+            result[n - d - 1][y] = i
+            i += 1
+        }
+
+        for x in stride(from: n - d - 2, through: d, by: -1) { // ←
+            result[x][n - d - 1] = i
+            i += 1
+        }
+
+        for y in stride(from: n - d - 2, to: d, by: -1) { // ↑
+            result[d][y] = i
+            i += 1
+        }
+    }
+
+    return result
+}
+
 import XCTest
 
-class SpiralArrayTests: XCTestCase {
+class StateSpiralArrayTests: XCTestCase {
 
     let zeroSpiral: [[Int]] = []
     let oneSpiral: [[Int]] = [[1]]
@@ -77,42 +107,97 @@ class SpiralArrayTests: XCTestCase {
         XCTAssertEqual(res, zeroSpiral)
     }
 
-    func test1State() {
+    func test1() {
         let res = getSpiralState(n: 1)
         XCTAssertEqual(res, oneSpiral)
     }
 
-    func test2State() {
+    func test2() {
         let res = getSpiralState(n: 2)
         XCTAssertEqual(res, twoSpiral)
     }
 
-    func test3State() {
+    func test3() {
         let res = getSpiralState(n: 3)
         XCTAssertEqual(res, threeSpiral)
     }
 
-    func test4State() {
+    func test4() {
         let res = getSpiralState(n: 4)
         XCTAssertEqual(res, fourSpiral)
     }
 
-    func test5State() {
+    func test5() {
         let res = getSpiralState(n: 5)
         XCTAssertEqual(res, fiveSpiral)
     }
 
-    func test10State() {
+    func test10() {
         let res = getSpiralState(n: 10)
         XCTAssertEqual(res, tenSpiral)
     }
 
-//    func testPerformanceState() {
-//        self.measure {
-//            _ = getSpiralState(n: 100)
-//        }
-//    }
+    func testPerformance() {
+        self.measure {
+            _ = getSpiralState(n: 100)
+        }
+    }
 
 }
 
-SpiralArrayTests.defaultTestSuite.run()
+class QuadroSpiralArrayTests: XCTestCase {
+
+    let zeroSpiral: [[Int]] = []
+    let oneSpiral: [[Int]] = [[1]]
+    let twoSpiral: [[Int]] = [[1, 4], [2, 3]]
+    let threeSpiral: [[Int]] = [[1, 8, 7], [2, 9, 6], [3, 4, 5]]
+    let fourSpiral: [[Int]] = [[1, 12, 11, 10], [2, 13, 16, 9], [3, 14, 15, 8], [4, 5, 6, 7]]
+    let fiveSpiral: [[Int]] = [[1, 16, 15, 14, 13], [2, 17, 24, 23, 12], [3, 18, 25, 22, 11], [4, 19, 20, 21, 10], [5, 6, 7, 8, 9]]
+    let tenSpiral: [[Int]] = [[1, 36, 35, 34, 33, 32, 31, 30, 29, 28], [2, 37, 64, 63, 62, 61, 60, 59, 58, 27], [3, 38, 65, 84, 83, 82, 81, 80, 57, 26], [4, 39, 66, 85, 96, 95, 94, 79, 56, 25], [5, 40, 67, 86, 97, 100, 93, 78, 55, 24], [6, 41, 68, 87, 98, 99, 92, 77, 54, 23], [7, 42, 69, 88, 89, 90, 91, 76, 53, 22], [8, 43, 70, 71, 72, 73, 74, 75, 52, 21], [9, 44, 45, 46, 47, 48, 49, 50, 51, 20], [10, 11, 12, 13, 14, 15, 16, 17, 18, 19]]
+
+    func test0() {
+        let res = getSpiralQuadro(n: 0)
+        XCTAssertEqual(res, zeroSpiral)
+    }
+
+    func test1() {
+        let res = getSpiralQuadro(n: 1)
+        XCTAssertEqual(res, oneSpiral)
+    }
+
+    func test2() {
+        let res = getSpiralQuadro(n: 2)
+        XCTAssertEqual(res, twoSpiral)
+    }
+
+    func test3() {
+        let res = getSpiralQuadro(n: 3)
+        XCTAssertEqual(res, threeSpiral)
+    }
+
+    func test4() {
+        let res = getSpiralQuadro(n: 4)
+        XCTAssertEqual(res, fourSpiral)
+    }
+
+    func test5() {
+        let res = getSpiralQuadro(n: 5)
+        XCTAssertEqual(res, fiveSpiral)
+    }
+
+    func test10() {
+        let res = getSpiralQuadro(n: 10)
+        XCTAssertEqual(res, tenSpiral)
+    }
+
+    func testPerformance() {
+        self.measure {
+            _ = getSpiralQuadro(n: 100)
+        }
+    }
+
+}
+
+StateSpiralArrayTests.defaultTestSuite.run()
+QuadroSpiralArrayTests.defaultTestSuite.run()
+
